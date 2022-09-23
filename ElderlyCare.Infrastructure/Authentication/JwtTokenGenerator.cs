@@ -1,4 +1,6 @@
 ﻿using ElderlyCare.Application.Common.Interfaces.Authentication;
+using ElderlyCare.Application.Common.Interfaces.Services;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -8,10 +10,19 @@ namespace ElderlyCare.Infrastructure.Authentication;
 
 public class JwtTokenGenerator : IJwtTokenGenerator
 {
+    private readonly JwtSettings _jwtSettings;
+    private readonly IDateTimeProvider _dateTimeProvider;
+
+    public JwtTokenGenerator(IDateTimeProvider dateTimeProvider, IOptions<JwtSettings> jwtSettings)
+    {
+        _dateTimeProvider = dateTimeProvider;
+        _jwtSettings = jwtSettings.Value;
+    }
+
     public string GenerateToken(Guid userId, string firstName, string lastName)
     {
         var signingCredentials = new SigningCredentials(
-            new SymmetricSecurityKey(Encoding.UTF8.GetBytes("super-secret-key")), 
+            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Secret)), 
             SecurityAlgorithms.HmacSha256
             );
         var claims = new[]
@@ -34,8 +45,9 @@ public class JwtTokenGenerator : IJwtTokenGenerator
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
         var securityToken = new JwtSecurityToken(
-            issuer: "ElderlyCare",
-            expires: DateTime.Now.AddDays(1),
+            issuer: _jwtSettings.Issuer,
+            expires: _dateTimeProvider.UtcNow.AddMinutes(_jwtSettings.ExpiryMinutes),
+            audience: _jwtSettings.Audience,
             claims: claims,
             signingCredentials: signingCredentials
             );

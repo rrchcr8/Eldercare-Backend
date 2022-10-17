@@ -10,4 +10,12 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Common\Interfaces\Persistence\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ElderlyCare.Domain\ElderlyCare.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

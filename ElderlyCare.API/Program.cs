@@ -1,3 +1,4 @@
+using ElderlyCare.API.Middleware;
 using ElderlyCare.Application;
 using ElderlyCare.Infrastructure;
 
@@ -22,7 +23,7 @@ var app = builder.Build();
         app.UseSwagger();
         app.UseSwaggerUI();
     }
-
+    app.UseMiddleware<ErrorHandlingMiddleware>();
     app.UseHttpsRedirection();
 
     app.UseAuthorization();

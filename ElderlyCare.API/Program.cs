@@ -1,4 +1,4 @@
-using ElderlyCare.API.Middleware;
+using ElderlyCare.API.Filters;
 using ElderlyCare.Application;
 using ElderlyCare.Infrastructure;
 
@@ -8,10 +8,16 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services
         .AddApplication()
         .AddInfrastructure(builder.Configuration);
-    builder.Services.AddControllers();
+    builder.Services.AddControllers(options =>
+    {
+        options.Filters.Add<ErrorHandlingFilterAttrinute>();
+    });
+
+
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
+
 }
 
 
@@ -23,7 +29,8 @@ var app = builder.Build();
         app.UseSwagger();
         app.UseSwaggerUI();
     }
-    app.UseMiddleware<ErrorHandlingMiddleware>();
+    //app.UseMiddleware<ErrorHandlingMiddleware>();
+    
     app.UseHttpsRedirection();
 
     app.UseAuthorization();

@@ -51,7 +51,7 @@ namespace ElderlyCare.API.Controllers
                 authResult.Token
                 );
             
-            return Ok(request);
+            return Ok(response);
         }
     }
 }

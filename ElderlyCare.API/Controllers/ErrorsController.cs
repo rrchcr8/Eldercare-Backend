@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ElderlyCare.API.Controllers
@@ -8,7 +9,8 @@ namespace ElderlyCare.API.Controllers
         [Route("/error")]
         public IActionResult Error()
         {
-            return Problem();
+            Exception? exception = HttpContext.Features.Get<IExceptionHandlerFeature>()?.Error;
+            return Problem(title: exception?.Message);
         }
 
     }

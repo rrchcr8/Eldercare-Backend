@@ -1,7 +1,9 @@
+using ElderlyCare.API.Errors;
 using ElderlyCare.API.Filters;
 using ElderlyCare.API.Middleware;
 using ElderlyCare.Application;
 using ElderlyCare.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 {
@@ -14,6 +16,7 @@ var builder = WebApplication.CreateBuilder(args);
     //{
     //    options.Filters.Add<ErrorHandlingFilterAttrinute>();
     //});
+    builder.Services.AddSingleton<ProblemDetailsFactory, CustomProblemDetailsFactory>();
 
 
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

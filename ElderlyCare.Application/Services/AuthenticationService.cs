@@ -1,4 +1,5 @@
-﻿using ElderlyCare.Application.Common.Interfaces.Authentication;
+﻿using ElderlyCare.Application.Common.Errors;
+using ElderlyCare.Application.Common.Interfaces.Authentication;
 using ElderlyCare.Application.Common.Interfaces.Persistence;
 using ElderlyCare.Domain.Entities;
 using System;
@@ -25,7 +26,7 @@ public class AuthenticationService : IAuthenticationService
         // 1.    Check if user already exists
         if (_userRepository.GetUserByEmail(email) is not null)
         {
-            throw new Exception("User with given name already exists");
+            throw new DuplicateEmailException();
         }
 
         // 2.   Create user (generate an unique Id) & persist

@@ -1,6 +1,4 @@
 using ElderlyCare.API.Errors;
-using ElderlyCare.API.Filters;
-using ElderlyCare.API.Middleware;
 using ElderlyCare.Application;
 using ElderlyCare.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -12,10 +10,6 @@ var builder = WebApplication.CreateBuilder(args);
         .AddApplication()
         .AddInfrastructure(builder.Configuration);
     builder.Services.AddControllers();
-    //builder.Services.AddControllers(options =>
-    //{
-    //    options.Filters.Add<ErrorHandlingFilterAttrinute>();
-    //});
     builder.Services.AddSingleton<ProblemDetailsFactory, CustomProblemDetailsFactory>();
 
 
@@ -34,7 +28,6 @@ var app = builder.Build();
         app.UseSwagger();
         app.UseSwaggerUI();
     }
-    //app.UseMiddleware<ErrorHandlingMiddleware>();
     app.UseExceptionHandler("/error");
     
     app.UseHttpsRedirection();

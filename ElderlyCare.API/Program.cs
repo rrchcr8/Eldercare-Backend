@@ -1,4 +1,4 @@
-using ElderlyCare.API.Errors;
+using ElderlyCare.API.CustomError;
 using ElderlyCare.Application;
 using ElderlyCare.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Infrastructure;

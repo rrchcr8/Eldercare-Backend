@@ -1,7 +1,9 @@
 ﻿using ElderlyCare.Application.Common.Errors;
 using ElderlyCare.Application.Common.Interfaces.Authentication;
 using ElderlyCare.Application.Common.Interfaces.Persistence;
+using ElderlyCare.Domain.Common.Errors;
 using ElderlyCare.Domain.Entities;
+using ErrorOr;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,12 +23,12 @@ public class AuthenticationService : IAuthenticationService
         _userRepository = userRepository;
     }
 
-    public AuthenticationResult Register(string firstName, string lastName, string email, string password)
+    public ErrorOr<AuthenticationResult> Register(string firstName, string lastName, string email, string password)
     {
         // 1.    Check if user already exists
         if (_userRepository.GetUserByEmail(email) is not null)
         {
-            throw new DuplicateEmailException();
+            return Errors.User.DuplicateEmail;
         }
 
         // 2.   Create user (generate an unique Id) & persist
@@ -48,18 +50,18 @@ public class AuthenticationService : IAuthenticationService
             token);
     }
 
-    public AuthenticationResult Login(string email, string password)
+    public ErrorOr<AuthenticationResult> Login(string email, string password)
     {
         // 1.    Check if user already exists
         if (_userRepository.GetUserByEmail(email) is not User user)
         {
-            throw new Exception("User with given name does not exists");
+            return Errors.Authentication.InvalidCredentials;
         }
 
         // 2.   validate if the password is correct.
         if (user.Password != password)
         {
-            throw new Exception("Invalid password");
+            return Errors.Authentication.InvalidCredentials;
         }
 
 
